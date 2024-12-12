@@ -62,5 +62,5 @@ Gestion des abonnements et facturations des abonnements (par exemple service de 
     Tableau de bord des abonnements, ou graphique
 
     - Top 10 ou top 5 (plus cher)
-    - Le moins cher
+    - Top 10 ou top 5 (moins cher)
     - Moyenne de dépenses par mois, année, ...

@@ -53,6 +53,14 @@ Gestion des abonnements et facturations des abonnements (par exemple service de 
     <!-- Stocker les paiements ou annulations dans une table -->
     <!-- Nom, type de facture, prix_total, date_facture, heure_facture -->
 
-3. Historique des Factures/transactions
+4. Historique des Factures/transactions
     - Recherche par type (facture/remboursement)
     - Filtre par type abonnement (mois, année, ...)
+
+5. Statistiques des abonnements
+
+    Tableau de bord des abonnements, ou graphique
+
+    - Top 10 ou top 5 (plus cher)
+    - Le moins cher
+    - Moyenne de dépenses par mois, année, ...

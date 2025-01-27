@@ -1,6 +1,14 @@
 # Gestion-Abonnements-et-Facturations
 Une application qui permettra de gerer les abonnements et facturation des abonnements d'un ou plusieurs utilisateur(s).
-Gestion des abonnements et facturations des abonnements (par exemple service de streaming, abonnement à un ISP, abonnement TV, service appel et Internet mobile, ...) 
+Gestion des abonnements et facturations des abonnements (par exemple service de streaming, abonnement à un ISP, abonnement TV, service appel et Internet mobile, ...)
+    Tech stack: C#
+        - .NET Core 9
+            - Entity Framework Core
+            - PostgreSQL
+            - Razor Pages
+            - Bootstrap
+            - CSS
+            - JavaScript (Js, Chart.js)
 
 ## Login
  On a 2 type de profils 
@@ -19,7 +27,7 @@ Gestion des abonnements et facturations des abonnements (par exemple service de 
    
 3. Gestion des utilisateurs
      - CRUD 
-        <!-- Nom, prenom, Date Naissance, Adresse, motdepasse -->
+        <!-- Nom, prenom, Date Naissance, Adresse, username, motdepasse -->
 
 4. Gestion Annulation et Remboursement
     - Prix de remboursement = (prix d'abonnement) - commission
@@ -51,7 +59,7 @@ Gestion des abonnements et facturations des abonnements (par exemple service de 
             - Création Facture de remboursement et export en PDF
 
     <!-- Stocker les paiements ou annulations dans une table -->
-    <!-- Nom, type de facture, prix_total, date_facture, heure_facture -->
+    <!-- Nom, statut, prix_total, date_facture, heure_facture -->
 
 4. Historique des Factures/transactions
     - Recherche par type (facture/remboursement)

@@ -1,0 +1,43 @@
+@model Projet_.NET_Core_M2_Devops_Mr_Naina.Models.CommissionAnnulation
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>CommissionAnnulation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Prixmin" class="control-label"></label>
+                <input asp-for="Prixmin" class="form-control" />
+                <span asp-validation-for="Prixmin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prixmax" class="control-label"></label>
+                <input asp-for="Prixmax" class="form-control" />
+                <span asp-validation-for="Prixmax" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pourcentage" class="control-label"></label>
+                <input asp-for="Pourcentage" class="form-control" />
+                <span asp-validation-for="Pourcentage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

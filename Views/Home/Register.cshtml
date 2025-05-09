@@ -1,0 +1,104 @@
+﻿@model Projet_.NET_Core_M2_Devops_Mr_Naina.Models.Users
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<!-- Custom CSS for minor tweaks -->
+<style>
+    .form-label {
+        font-weight: 600;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .mt-5 {
+        margin-top: 3rem;
+    }
+
+    .register-form{
+        height: 85vh;
+    }
+</style>
+
+<div class="container mt-3">
+    <div class="row justify-content-center align-items-center register-form">
+        <div class="col-md-6">
+            <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success text-center mb-3">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            <form asp-action="Register">
+                <div class="form-group mb-3">
+                    <label asp-for="Nom" class="form-label mx-1">Nom</label>
+                    <input asp-for="Nom" placeholder="Nom" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Prenom" class="form-label mx-1">Prenom</label>
+                    <input asp-for="Prenom" placeholder="Prenom" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="DateNaisssance" class="form-label mx-1">Date de Naissance</label>
+                    <input asp-for="DateNaisssance" type="date" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.DateNaisssance, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Adresse" class="form-label mx-1">Adresse</label>
+                    <input asp-for="Adresse" placeholder="Analakely" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Username" class="form-label mx-1">Username</label>
+                    <input asp-for="Username" placeholder="username" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Motdepasse" class="form-label mx-1">Mot de Passe</label>
+                    <input asp-for="Motdepasse" type="password" placeholder="****" class="form-control shadow-sm" />
+                    @Html.ValidationMessageFor(model => model.Motdepasse, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group text-center mt-4">
+                    <input type="submit" value="Register" class="btn btn-primary btn-lg w-100 shadow-sm hover-shadow" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

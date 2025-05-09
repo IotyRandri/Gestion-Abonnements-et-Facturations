@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Projet_.NET_Core_M2_Devops_Mr_Naina.Models.AbonnementUsers>
+
+@{
+	ViewData["Title"] = "Abonnement à venir";
+	var abonnements = ViewData["abonnementsUser"] as List<AbonnementUsers>;
+
+	// Serialize the list of abonnements to a string to send with form
+	var json_abonnements = abonnements != null ? Newtonsoft.Json.JsonConvert.SerializeObject(abonnements) : "[]";
+
+}
+
+<!-- Script to get and send the value of dropdown list (typeAbonnements) with the paiement form -->
+<script>
+	document.addEventListener("DOMContentLoaded", function (){
+		// Select the form by its ID
+		var form_paiement = document.getElementById("form_paiement");
+
+		// Select the dropdown by its ID
+		var filter = document.getElementById("filter");
+
+		// Submit Listener to form
+		form_paiement.addEventListener("submit", function(event){
+			// Get the selected value from the dropdown
+			var value = filter.value;
+
+			// Create a hidden input with the filter value
+			var hidden_input = document.createElement("input");
+			hidden_input.type = "hidden";
+			hidden_input.name = "filter";
+			hidden_input.value = value;
+
+			// Add hidden input to form
+			form_paiement.appendChild(hidden_input);
+		})
+	});
+</script>
+
+<div class="container">
+	<div class="text-center mt-5">
+		<div class="row">
+			<h1><u>Vos abonnements à venir</u></h1>
+		</div>
+		<div class="row mt-5 mb-3">
+			<form asp-controller="AbonnementUsers" asp-action="AbonnementAVenir">
+				<div class="row">
+					<div class="col-auto">
+						@Html.DropDownList("filter", (SelectList)ViewData["typeAbonnements"], "Choisir un type d'abonnement", new { @class = "form-select" })
+					</div>
+					<div class="col-auto">
+						<input type="submit" class="btn btn-outline-primary" value="Filtrer" />
+					</div>
+					@if (TempData["ErrorMessage"] != null)
+					{
+						<div class="col-auto alert alert-danger">
+							@TempData["ErrorMessage"]
+						</div>
+					}
+				</div>
+			</form>
+			<table class="table mt-4">
+				<thead>
+					<tr>
+						<th>
+							@Html.DisplayNameFor(model => model.Abonnement)
+						</th>
+						<th>
+							Type Abonnement
+						</th>
+						<th>
+							Date et Heure Debut
+						</th>
+						<th>
+							Estimation Fin
+						</th>
+						<th>
+							Statut
+						</th>
+						<th>
+							@Html.DisplayNameFor(model => model.Abonnement.Prix)
+						</th>
+						<th>
+							Différence
+						</th>
+						<th>
+							Estimation Prix
+						</th>
+						<th>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (abonnements.Count == 0)
+					{
+						<tr>
+							<td colspan="7">
+								Aucun abonnement à venir
+							</td>
+						</tr>
+					}
+					else
+					{
+						<form id="form_paiement" asp-controller="AbonnementUsers" asp-action="PaiementAbonnement">
+							<input type="hidden" name="json_abonnementsuser" value="@json_abonnements" />
+							<input type="hidden" name="prixtotal" value="@ViewData["prixtotal"]" />
+							<input type="hidden" name="prixtotalestimation" value="@ViewData["prixtotalestimation"]" />
+							@foreach (var item in abonnements)
+							{
+							<tr>
+								<td>@item.Abonnement.Nom</td>
+								<td>@item.Abonnement.TypeAbonnement.Titre</td>
+								<td>@item.DateHeureDebut</td>
+									@if (item.DateHeureFin.Equals(DateTime.MinValue))
+									{
+									<td>Aucun</td>
+									}
+									else
+									{
+									<td>@item.DateHeureFin</td>
+									}
+								<td>@item.StatutAbonnement.Intitule</td>
+								<td>@item.Abonnement.Prix.ToString("N")</td>
+								<td>@item.Difference</td>
+								<td>@item.PrixEstimation.ToString("N")</td>
+							</tr>
+							}
+						<tr>
+							<td colspan="4"></td>
+							<td><b>Total</b></td>
+							<td>@ViewData["prixtotal"]</td>
+							<td><b>Total</b></td>
+							<td>@ViewData["prixtotalestimation"]</td>
+						</tr>
+						<tr>
+							<td colspan="7"></td>
+							<td>
+								<input type="submit" class="btn btn-outline-success" name="typepaiement" value="Payer" />
+								<input type="submit" class="btn btn-outline-danger" name="typepaiement" value="Annuler" />
+							</td>
+						</tr>
+						</form>
+					}
+				</tbody>
+			</table>
+		</div>
+		<div class="row text-center">
+			<div class="col">
+				@if (ViewData["ErrorMessage"] != null)
+				{
+					<div class="alert alert-danger">
+						@ViewData["ErrorMessage"]
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+

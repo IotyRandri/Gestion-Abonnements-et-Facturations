@@ -1,0 +1,324 @@
+﻿@model Projet_.NET_Core_M2_Devops_Mr_Naina.Models.AbonnementUsers
+
+@{
+	ViewData["Title"] = "Home User";
+
+	// Get list of abonnements
+	var abonnements = ViewData["abonnementsUser"] as List<AbonnementUsers>;
+
+	// Get Top 10 most expensive abonnements
+	var top10AbonnementsCher = ViewData["topabonnementsCher"] as List<AbonnementUsersDTO>;
+	var labels_top10Cher = ViewData["labels_top10Cher"];
+	var data_top10Cher = ViewData["data_top10Cher"];
+
+	// Get Top 10 cheapest abonnements
+	var top10AbonnementsMoinsCher = ViewData["top10AbonnementsMoinsCher"] as List<AbonnementUsersDTO>;
+	var labels_top10MoinsCher = ViewData["labels_top10MoinsCher"];
+	var data_top10MoinsCher = ViewData["data_top10MoinsCher"];
+
+	// Get average spending in months in total
+	var moyenneDepense = ViewData["moyenneDepense"];
+	var labels_moyenneDepense = ViewData["labels_moyenneDepense"];
+	var data_moyenneDepense = ViewData["data_moyenneDepense"];
+
+	// Get Pagination Data
+	var pageIndex = (int) ViewData["pageIndex"];
+	var totalPages = (int) ViewData["totalPages"];
+
+
+}
+
+<head>
+	<!-- Add Chart.js module-->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+	<!-- Style pagination -->
+	<style>
+
+		.card {
+			margin-bottom: 20px;
+		}
+
+		/* Smaller Pagination */
+		.pagination {
+			display: flex;
+			justify-content: center;
+			padding: 10px;
+			font-size: 14px;
+		}
+
+		.page-link {
+			margin: 0 3px;
+			text-decoration: none;
+			color: #5a5a5a; /* More muted, professional color */
+			padding: 6px 12px;
+			border-radius: 5px;
+			background-color: #f8f9fa; /* Light gray background */
+			border: 1px solid #ddd;
+		}
+
+			.page-link:hover {
+				background-color: #007bff; /* Professional blue */
+				color: white;
+			}
+
+			.page-link.active {
+				background-color: #007bff; /* Professional blue */
+				color: white;
+				border: 1px solid #007bff; /* Matching border color */
+			}
+
+		.table th, .table td {
+			padding: 10px;
+			text-align: center;
+		}
+
+	</style>
+</head>
+
+<div class="container">
+	<div class="text-center">
+		<div class="col-md">
+			<div class="row">
+				<h1> Bonjour <u>@ViewData["Username"]</u>!</h1>
+			</div>
+
+			<!-- Graph Cards -->
+			<div class="row pt-3">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">
+							<h5>Top 10 Abonnements Plus Chers Total</h5>
+						</div>
+						<div class="card-body">
+							<canvas id="top10cher" height="300"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card">
+						<div class="card-header">
+							<h5>Top 10 Abonnements Moins Chers Total</h5>
+						</div>
+						<div class="card-body">
+							<canvas id="top10moinscher" height="300"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Graph for Moyenne Dépense -->
+			<div class="row pt-3">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">
+							<h5>Moyenne Dépenses @DateTime.Now.Year</h5>
+						</div>
+						<div class="card-body">
+							<canvas id="moyennedepensemois" height="100"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Subscriptions Table -->
+			<div class="row pt-3">
+				<h2><u>Vos Abonnements</u></h2>
+				<table class="table table-responsive">
+					<thead>
+						<tr>
+							<th>Abonnement</th>
+							<th>Statut</th>
+							<th>Date et Heure Début</th>
+							<th>Date de Paiement/Annulation</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (abonnements == null || !abonnements.Any())
+						{
+							<tr>
+								<td colspan="5">Vous n'avez pas encore d'abonnement</td>
+							</tr>
+						}
+						else
+						{
+							@foreach (var item in abonnements)
+							{
+								<tr>
+									<td>@Html.DisplayFor(modelItem => item.Abonnement.Nom)</td>
+									<td>@Html.DisplayFor(modelItem => item.StatutAbonnement.Intitule)</td>
+									<td>@item.DateHeureDebut</td>
+									@if (item.DateHeureFin.Equals(DateTime.MinValue))
+									{
+										<td>Aucun</td>
+									}
+									else
+									{
+										<td>@item.DateHeureFin</td>
+									}
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+
+				<!-- Pagination -->
+				<div class="pagination justify-content-center">
+					@if (pageIndex > 1)
+					{
+						<a class="page-link" href="@Url.Action("HomeUser", new { pageIndex = pageIndex - 1 })">Previous</a>
+					}
+
+					@* @if (abonnements.Count < totalPages && pageIndex == 1) *@
+					@* { *@
+					@* 	<a class="page-link active" href="@Url.Action("HomeUser", new { pageIndex = 1 })">1</a> *@
+					@* } *@
+
+					@for (var i = 1; i <= totalPages; i++)
+					{
+						<a class="page-link @(i == pageIndex ? "active" : "")" href="@Url.Action("HomeUser", new { pageIndex = i })">@i</a>
+					}
+
+					@if (pageIndex < totalPages)
+					{
+						<a class="page-link" href="@Url.Action("HomeUser", new { pageIndex = pageIndex + 1 })">Next</a>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Script to show top 10 plus cher abonnements graph -->
+<script>
+	var ctx = document.getElementById('top10cher').getContext('2d');
+	var myChart = new Chart(ctx, {
+		type: 'pie',
+		data: {
+			labels: @Json.Serialize(labels_top10Cher),
+			datasets: [{
+				label: 'Prix Total',
+				data: @Json.Serialize(data_top10Cher),
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+				],
+				borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)',
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			},
+			plugins: {
+				title : {
+					display: true,
+					// text: "Top 10 Abonnements Plus Cher Total",
+				}
+			},
+		}
+	});
+</script>
+
+<!-- Script to show top 10 moins cher abonnements graph -->
+<script>
+	var ctx = document.getElementById('top10moinscher').getContext('2d');
+	var myChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: @Json.Serialize(labels_top10MoinsCher),
+			datasets: [{
+				label: 'Prix Total',
+				data: @Json.Serialize(data_top10MoinsCher),
+				backgroundColor: [
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+					'rgba(153, 102, 255, 0.2)',
+					'rgba(255, 159, 64, 0.2)',
+					'rgba(255, 99, 132, 0.2)',
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 206, 86, 0.2)',
+					'rgba(75, 192, 192, 0.2)',
+				],
+				borderColor: [
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+					'rgba(153, 102, 255, 1)',
+					'rgba(255, 159, 64, 1)',
+					'rgba(255, 99, 132, 1)',
+					'rgba(54, 162, 235, 1)',
+					'rgba(255, 206, 86, 1)',
+					'rgba(75, 192, 192, 1)',
+				],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			},
+			plugins: {
+				title : {
+					display: true,
+					// text: "Top 10 Abonnements Moins Cher Total",
+				}
+			},
+		}
+	});
+</script>
+
+<!-- Script to show average spending in the months graph -->
+<script>
+	var ctx = document.getElementById('moyennedepensemois').getContext('2d');
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: @Json.Serialize(labels_moyenneDepense),
+			datasets: [{
+				label: 'Moyenne Prix',
+				data: @Json.Serialize(data_moyenneDepense),
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			},
+			plugins: {
+				title : {
+					display: true,
+					text: "Moyenne des dépenses dans les mois de cet année",
+				}
+			},
+		}
+	});
+</script>

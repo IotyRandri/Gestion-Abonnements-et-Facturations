@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Projet_.NET_Core_M2_Devops_Mr_Naina.Models.Facture>
+
+@{
+	ViewData["Title"] = "Factures User";
+
+	// Get list of factures
+	var factures = ViewData["facturesUser"] as List<Facture>;
+}
+
+
+<div class="container mt-5">
+	<div class="text-center">
+		<div class="row">
+			<h1><u>Vos Factures</u></h1>
+		</div>
+		<div class="row" style="padding-top: 3%">
+			<form asp-action="FacturesUser" asp-controller="Facture">
+				<div class="row">
+					<div class="col-auto">
+						@Html.DropDownList("filter_typefacture", (SelectList)ViewData["filter_typefacture"], "Tous", new { @class = "form-select" })
+					</div>
+					<div class="col-auto">
+						@Html.DropDownList("filter_typeabonnement", (SelectList)ViewData["filter_typeabonnement"], "Tous", new { @class = "form-select" })
+					</div>
+					<div class="col-auto">
+						<input type="submit" class="btn btn-outline-primary" value="Filtrer" />
+					</div>
+					@if (TempData["ErrorMessage"] != null)
+					{
+						<div class="col-auto alert alert-danger">
+							@TempData["ErrorMessage"]
+						</div>
+					}
+				</div>
+			</form>
+			<table class="table table-responsive">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Type Abonnement</th>
+						<th>Date et Heure</th>
+						<th>Statut</th>
+						<th>Prix Total</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var f in factures)
+					{
+						<tr>
+							<td>@f.Nom</td>
+							@if (f.TypeAbonnement == null){
+								<td>Aucun</td>
+							} else {
+								<td>@f.TypeAbonnement.Titre</td>
+							}
+							<td>@f.Dateheure</td>
+							<td>@f.StatutAbonnement.Intitule</td>
+							<td>@f.Prixtotal</td>
+							<td><a asp-route-idFacture="@f.Id" asp-action="DetailsFactureUser" asp-controller="Facture" class="btn btn-primary">Voir Détails</a></td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>

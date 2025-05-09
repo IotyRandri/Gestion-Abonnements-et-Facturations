@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Projet_.NET_Core_M2_Devops_Mr_Naina.Models.AbonnementUsers>
+
+@{
+	ViewData["Title"] = "Details Facture";
+	var detailsFactureUser = ViewData["detailsFactureUser"] as List<AbonnementUsers>;
+	var facture = ViewData["facture"] as Facture;
+}
+
+<div class="container mt-5">
+	<div class="text-center">
+		<div class="row">
+			<div class="row">
+				<h1><u>Details Facture</u></h1>
+			</div>
+		</div>
+		<div class="row mt-3">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Abonnement</th>
+						<th>Type Abonnement</th>
+						<th>Statut</th>
+						<th>Date et Heure Debut</th>
+						<th>Date et Heure Fin</th>
+						<th>Prix Initial</th>
+						<th>Prix Estimation</th>
+						<th>Prix Commission</th>
+						<th>Prix Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var details in detailsFactureUser){
+						<tr>
+							<td>@Html.DisplayFor(model => details.Abonnement.Nom)</td>
+							<td>@Html.DisplayFor(model => details.Abonnement.TypeAbonnement.Titre)</td>
+							<td>@Html.DisplayFor(model => details.StatutAbonnement.Intitule)</td>
+							<td>@details.DateHeureDebut</td>
+							<td>@details.DateHeureFin</td>
+							<td>@Html.DisplayFor(model => details.Abonnement.Prix)</td>
+							<td>@Html.DisplayFor(model => details.PrixEstimation)</td>
+							<td>@Html.DisplayFor(model => details.PrixCommission)</td>
+							<td>@Html.DisplayFor(model => details.PrixTotal)</td>
+						</tr>
+					}
+						<tr>
+							<td colspan="7"></td>
+							<td><b>Total</b></td>
+							<td>@Html.DisplayFor(model => facture.Prixtotal)</td>
+						</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
